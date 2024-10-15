@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Interests</title>
+    <style>
+        .option-box {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .option-box.selected {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .option-box:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Select Your Interests:</h2>
+    <form action="/favorites" method="POST">
+        <div class="option-box" onclick="toggleSelection(this, 'Music')">Music</div>
+        <div class="option-box" onclick="toggleSelection(this, 'Art')">Art</div>
+        <div class="option-box" onclick="toggleSelection(this, 'Sports')">Sports</div>
+        <div class="option-box" onclick="toggleSelection(this, 'Health')">Health</div>
+        <div class="option-box" onclick="toggleSelection(this, 'Finance')">Finance</div>
+        <div class="option-box" onclick="toggleSelection(this, 'Fitness')">Fitness</div>
+
+        <!-- Hidden input to store the selected values -->
+        <input type="hidden" name="interests" id="selectedInterests">
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    let selectedInterests = [];
+
+    function toggleSelection(element, interest) {
+        element.classList.toggle('selected'); // Toggle the selected class
+        const index = selectedInterests.indexOf(interest);
+        
+        if (index > -1) {
+            // If the interest is already in the array, remove it
+            selectedInterests.splice(index, 1);
+        } else {
+            // If the interest is not in the array, add it
+            selectedInterests.push(interest);
+        }
+
+        // Update the hidden input value
+        document.getElementById('selectedInterests').value = selectedInterests.join(',');
+    }
+</script>
+</body>
+</html>

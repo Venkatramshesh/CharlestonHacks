@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick a Future Location</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .search-container {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 0; /* No gap between input and dropdown */
+            border-radius: 30px; /* Fully rounded corners for the input box */
+            border: 1px solid #ccc;
+            border-bottom: 1px; /* Remove bottom border */
+        }
+        .suggestions-list {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-top: none; /* Remove the top border so it blends with the input */
+            border-radius: 0 0 30px 30px; /* Rounded corners for the bottom */
+            max-height: 150px; /* Limit height of dropdown */
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .suggestions-list li {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions-list li:hover {
+            background-color: #ddd;
+        }
+        .suggestions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .suggestion-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        .suggestion-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Pick a location you would like to visit in the future:</h2>
+
+    <!-- Search container with input field and suggestions -->
+    <div class="search-container">
+        <input type="text" id="city-search" placeholder="Search" onkeyup="showSuggestions()">
+        <!-- <ul id="suggestions" class="suggestions-list"></ul> -->
+    </div>
+    <br>
+
+    <!-- City images as clickable elements -->
+    <div class="suggestions">
+        <div class="suggestion-item" onclick="selectCity('New York')">
+            <img src="{{ url_for('static', filename='images/ny.jpg') }}" alt="New York">
+            <div>New York</div>
+        </div>
+        <div class="suggestion-item" onclick="selectCity('San Francisco')">
+            <img src="{{ url_for('static', filename='images/sf.jpg') }}" alt="San Francisco">
+            <div>San Francisco</div>
+        </div>
+        <div class="suggestion-item" onclick="selectCity('Boston')">
+            <img src="{{ url_for('static', filename='images/boston.jpg') }}" alt="Boston">
+            <div>Boston</div>
+        </div>
+        <div class="suggestion-item" onclick="selectCity('Washington DC')">
+            <img src="{{ url_for('static', filename='images/dc.jpg') }}" alt="Washington DC">
+            <div>Washington DC</div>
+        </div>
+    </div>
+
+    <!-- Form to submit the selected city -->
+    <form action="/activities" method="POST">
+        <!-- Hidden input to store the selected city for submission -->
+        <input type="hidden" id="selected-city" name="future_location" required>
+        <br>
+        <button type="submit">Next</button>
+    </form>
+</div>
+
+<script>
+    const cities = [
+        "New York", "San Francisco", "Boston", "Washington DC", "Los Angeles", 
+        "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", 
+        "San Diego", "Dallas", "Austin", "Columbus", "Fort Worth", 
+        "Charlotte", "Indianapolis", "Seattle", "Denver", "Nashville", 
+        "El Paso", "Detroit", "Las Vegas", "Portland", "Miami"
+    ];
+
+    function showSuggestions() {
+        const input = document.getElementById('city-search').value.toLowerCase();
+        const suggestions = document.getElementById('suggestions');
+        suggestions.innerHTML = '';  // Clear previous suggestions
+
+        if (input.length > 0) {
+            const filteredCities = cities.filter(city => city.toLowerCase().includes(input));
+
+            // Populate the suggestion list
+            filteredCities.forEach(city => {
+                const listItem = document.createElement('li');
+                listItem.textContent = city;
+                listItem.onclick = function() {
+                    selectCity(city);
+                };
+                suggestions.appendChild(listItem);
+            });
+        }
+    }
+
+    function selectCity(city) {
+        document.getElementById('city-search').value = city;
+        document.getElementById('selected-city').value = city; // Populate the hidden input
+        document.getElementById('suggestions').innerHTML = '';  // Clear suggestions
+    }
+</script>
+
+</body>
+</html>

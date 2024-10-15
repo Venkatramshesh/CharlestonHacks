@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Interests</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .option-box {
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option-box.selected {
+            background-color: #008CBA;
+            color: white;
+        }
+        .option-box:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>What activities interest you:</h2>
+    <form action="/interests" method="POST">
+        <div class="options">
+            <div class="option-box" onclick="toggleSelection(this, 'Concerts')">Concerts</div>
+            <div class="option-box" onclick="toggleSelection(this, 'Hiking')">Hiking</div>
+            <div class="option-box" onclick="toggleSelection(this, 'Sports')">Sports</div>
+            <div class="option-box" onclick="toggleSelection(this, 'Museums')">Museums</div>
+            <div class="option-box" onclick="toggleSelection(this, 'Restaurants')">Restaurants</div>
+            <div class="option-box" onclick="toggleSelection(this, 'City walking')">Parks</div>
+        </div>
+        <br>
+        <input type="hidden" name="activities" id="activities-input">
+        <button type="submit">Next</button>
+    </form>
+</div>
+
+<script>
+    let selectedActivities = [];
+
+    function toggleSelection(element, activity) {
+        if (selectedActivities.includes(activity)) {
+            selectedActivities = selectedActivities.filter(item => item !== activity);
+            element.classList.remove('selected');
+        } else {
+            selectedActivities.push(activity);
+            element.classList.add('selected');
+        }
+        document.getElementById('activities-input').value = selectedActivities.join(',');
+    }
+</script>
+
+</body>
+</html>
